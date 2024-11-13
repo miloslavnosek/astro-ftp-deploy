@@ -1,0 +1,67 @@
+name: "Astro FTP"
+description: "A composite GitHub action that deploys Astro site to any FTP server."
+branding:
+  icon: "box"
+  color: "orange"
+inputs:
+  server:
+    description: "FTP server hostname"
+    required: true
+  username:
+    description: "FTP username"
+    required: true
+  password:
+    description: "FTP password"
+    required: true
+  directory:
+    description: "Path to upload to (on the server). Must end with trailing slash /"
+    required: false
+    default: "public_html/"
+  protocol:
+    description: "Protocol to use, supports `ftp`, `ftps` and `ftps-legacy`. Defaults to `ftp`"
+    required: false
+    default: "ftp"
+  port:
+    description: "Remote server port"
+    required: false
+    default: "21"
+  path:
+    description: "Path of the directory containing your site"
+    required: false
+    default: "."
+  dry-run:
+    description: "Dry run mode for FTP upload"
+    required: false
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: "latest"
+
+    - name: Install dependencies with Bun
+      shell: "bash"
+      run: |
+        cd ${{ inputs.path }}
+        bun install
+
+    - name: Build with Bun
+      shell: "bash"
+      run: |
+        cd ${{ inputs.path }}
+        bun run build
+
+    - name: Upload to FTP Server
+      uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
+      with:
+        server: ${{ inputs.server }}
+        port: ${{ inputs.port }}
+        protocol: ${{ inputs.protocol }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+        server-dir: ${{ inputs.directory }}
+        dry-run: ${{ inputs.dry-run }}
+        local-dir: ./dist/
