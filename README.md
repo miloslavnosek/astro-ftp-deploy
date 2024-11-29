@@ -1,7 +1,7 @@
 # Deploy Astro using FTP
 
 This action builds and deploys your [Astro](https://github.com/withastro/astro) project via FTP. 
-This is a soft fork of [radenpioneer/astro-ftp-deploy](https://github.com/radenpioneer/astro-ftp-deploy) focused on lightning fast builds and updated dependencies. The action for example uses bun instead of node.js.
+It is is based on the idea of [radenpioneer/astro-ftp-deploy](https://github.com/radenpioneer/astro-ftp-deploy) and focuses on lightning fast builds and updated dependencies. The action uses bun instead of node.js.
 
 ## Usage
 
